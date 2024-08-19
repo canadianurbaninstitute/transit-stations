@@ -22,7 +22,7 @@
         .legend {
             position: absolute;
             bottom: 30px;
-            left: 10px;
+            right: 10px;
             background-color: white;
             padding: 10px;
             font-family: Arial, sans-serif;
@@ -61,8 +61,8 @@
             background-color: #13c1fb;
         }
     </style>
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.6.0/mapbox-gl.css" rel="stylesheet">
 </head>
 <body>
 
@@ -79,12 +79,50 @@
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/canadianurbaninstitute/clzwuqc4o005v01qj30ua6zj2?fresh=true', // Replace with your Mapbox style URL
-        center: [-79.3832, 43.6532], // Example coordinates for Toronto
-        zoom: 12
+        center: [-94.3832, 57.6532], // Example coordinates for Toronto
+        zoom: 3
     });
 
     // Add navigation controls to the map
     map.addControl(new mapboxgl.NavigationControl());
+
+    const popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+
+    // Add a popup on hover for the proposed_stations layer
+map.on('mousemove', 'proposed-stations', function (e) {
+    // Change the cursor style as a UI indicator.
+    map.getCanvas().style.cursor = 'pointer';
+
+    // Get the coordinates of the feature that was hovered over
+    var coordinates = e.features[0].geometry.coordinates.slice();
+
+    // Get the line_name property from the hovered feature
+    var lineName = e.features[0].properties.line_name;
+    var name = e.features[0].properties.name;
+
+    // Ensure that if the map is zoomed out such that multiple
+    // copies of the feature are visible, the popup appears
+    // over the copy being hovered over.
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+        coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+
+    // Create and show the popup
+    popup
+        .setLngLat(coordinates)
+        .setHTML('<strong>Station Name: </strong>' + name + '<br>' + '<strong>Line Name: </strong>' + lineName)
+        .addTo(map);
+});
+
+// Reset the cursor style when it leaves the layer
+map.on('mouseleave', 'proposed-stations', function () {
+    map.getCanvas().style.cursor = '';
+    popup.remove();
+});
+
 </script>
 
 </body>
