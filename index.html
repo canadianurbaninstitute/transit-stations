@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapbox Fullscreen Map with Legend</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        #map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 30px;
+            left: 10px;
+            background-color: white;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .legend h4 {
+            margin: 0 0 5px 0;
+            font-size: 16px;
+        }
+
+        .legend div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend div:last-child {
+            margin-bottom: 0;
+        }
+
+        .legend .circle {
+            height: 12px;
+            width: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .legend .red {
+            background-color: #ff5c5c;
+        }
+
+        .legend .blue {
+            background-color: #13c1fb;
+        }
+    </style>
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
+</head>
+<body>
+
+<div id="map"></div>
+
+<div class="legend">
+    <h4>Legend</h4>
+    <div><span class="circle red"></span>Existing Transit Stations</div>
+    <div><span class="circle blue"></span>Proposed Transit Stations</div>
+</div>
+
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1IjoiY2FuYWRpYW51cmJhbmluc3RpdHV0ZSIsImEiOiJjbG95bzJiMG4wNW5mMmlzMjkxOW5lM241In0.o8ZurilZ00tGHXFV-gLSag';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/canadianurbaninstitute/clzwuqc4o005v01qj30ua6zj2?fresh=true', // Replace with your Mapbox style URL
+        center: [-79.3832, 43.6532], // Example coordinates for Toronto
+        zoom: 12
+    });
+
+    // Add navigation controls to the map
+    map.addControl(new mapboxgl.NavigationControl());
+</script>
+
+</body>
+</html>
